@@ -1,4 +1,11 @@
 Version 10.2.0
+Updated TOC
+Update lua errors for TWW patch.
+  *Addon API being depecated causing many issues
+  *Options Menu not loading
+  *Issues with icons being smashed together
+
+Version 10.2.0
 Bump TOC
 
 Version 10.1.7
