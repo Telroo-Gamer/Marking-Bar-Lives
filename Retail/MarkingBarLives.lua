@@ -478,8 +478,8 @@ function MB_Announce()
 		else -- IN A PARTY
 			MB_Announce_to_Chat("PARTY") 
 		end	
-			else if IsInGroup(LE_PARTY_CATEGORY_INSTANCE) then
-				if IsInRaid() then
+			else if IsInGroup(LE_PARTY_CATEGORY_INSTANCE) then -- true if the player is in a instance type group. (e.g. LFG, LFR) 
+				if IsInRaid() then  -- IN A RAID
 					if UnitIsGroupLeader("player") or UnitIsGroupAssistant("player") then		-- ABLE TO MARK
 						MB_Announce_to_Chat("INSTANCE_CHAT")	
 					else
@@ -674,18 +674,76 @@ function MB_unlock(DB)
 end
 
 function MB_lockToggle(DB)
-    if ( DB == "main" ) then
-        if MBDB.locked then MB_unlock("main") else MB_lock("main") end
-    elseif ( DB == "ctrl" ) then
-        if MBCtrlDB.locked then
-            if MBDB.ctrlLock then MB_ctrlUnlock() end -- if ctrl is connected to icons
-            MB_unlock("ctrl")
-        else
-            MB_lock("ctrl")
-        end
-    elseif ( DB == "flare" ) then
-        if MBFlaresDB.locked then MB_unlock("flare") else MB_lock("flare") end
-    end
+	if InCombatLockdown() then -- In Combat prevents Lock interaction		
+		--if IsControlKeyDown() and not (IsAltKeyDown() or IsShiftKeyDown()) then -- Ctrl and not Alt or Shift is used to unlock
+		if IsShiftKeyDown() then -- Shift is used to unlock
+			if ( DB == "main" ) then
+				if MBDB.locked then
+					MB_unlock("main")
+				else
+					MB_lock("main")
+				end
+			elseif ( DB == "ctrl" ) then
+				if MBCtrlDB.locked then
+					if MBDB.ctrlLock then -- if ctrl is connected to icons
+						MB_ctrlUnlock()
+					end
+					MB_unlock("ctrl")
+				else
+					MB_lock("ctrl")
+				end
+			elseif ( DB == "flare" ) then
+				if MBFlaresDB.locked then
+					MB_unlock("flare")
+				else
+					MB_lock("flare")
+				end
+			end
+		end
+	else -- Out of Combat allows Lock interaction	
+		if ( DB == "main" ) then
+			if MBDB.locked then
+				MB_unlock("main")
+			else
+				MB_lock("main")
+			end
+		elseif ( DB == "main_menu" ) then
+			if MBDB.locked then
+				MB_unlock("main")
+			else
+				MB_lock("main")
+			end
+		elseif ( DB == "ctrl" ) then
+			if MBCtrlDB.locked then -- if ctrl is connected to icons
+				if MBDB.ctrlLock then
+					MB_ctrlUnlock()
+				end
+				MB_unlock("ctrl")
+			else
+				MB_lock("ctrl")
+			end
+		elseif ( DB == "ctrl_menu" ) then
+			if MBCtrlDB.locked then
+				if MBDB.ctrlLock then -- if ctrl is connected to icons
+					MB_ctrlUnlock()
+				end
+				MB_unlock("ctrl")
+			else
+				MB_lock("ctrl")
+			end
+		elseif ( DB == "flare" ) then
+			if MBFlaresDB.locked then
+				MB_unlock("flare")
+			else
+				MB_lock("flare")
+			end
+		elseif ( DB == "flare_menu" ) then
+			if MBFlaresDB.locked then
+				MB_unlock("flare")
+			else
+			MB_lock("flare")
+			end
+		end
 end
 
 function MB_ctrlLock()
