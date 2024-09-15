@@ -236,7 +236,7 @@ lockIcon:SetNormalTexture("Interface\\AddOns\\MarkingBarLives\\resources\\Glues-
 lockIcon:GetNormalTexture():SetTexCoord(0.25, 0.50, 0, 1)
 lockIcon:EnableMouse(true)
 lockIcon:SetScript("OnClick", function(self) MB_lockToggle("main") end)
-lockIcon:SetScript("OnEnter", function(self) if (MBDB.tooltips==true) then GameTooltip:SetOwner(self, "ANCHOR_CURSOR"); GameTooltip:ClearLines(); GameTooltip:AddLine("Lock/Unlock Icons",0.88,0.65,0); GameTooltip:Show() end end)
+lockIcon:SetScript("OnEnter", function(self) if (MBDB.tooltips==true) then GameTooltip:SetOwner(self, "ANCHOR_CURSOR"); GameTooltip:ClearLines(); if InCombatLockdown() then GameTooltip:AddLine("In Combat, Hold Shift + Click to (Un)Lock",0.88,0.65,0) else GameTooltip:AddLine("Lock/Unlock",0.88,0.65,0) end; GameTooltip:Show() end end)
 lockIcon:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
 -------------------------------------------------------
@@ -300,7 +300,7 @@ ctrlLockIcon:SetSize(20,20)
 ctrlLockIcon:SetNormalTexture("Interface\\AddOns\\MarkingBarLives\\resources\\Glues-Addon-Icons")
 ctrlLockIcon:GetNormalTexture():SetTexCoord(0.25, 0.50, 0, 1)
 ctrlLockIcon:SetScript("OnClick", function(self) MB_lockToggle("ctrl") end)
-ctrlLockIcon:SetScript("OnEnter", function(self) if (MBCtrlDB.tooltips==true) then GameTooltip:SetOwner(self, "ANCHOR_CURSOR"); GameTooltip:ClearLines(); GameTooltip:AddLine("Lock/Unlock Controls",0.88,0.65,0); GameTooltip:Show() end end)
+ctrlLockIcon:SetScript("OnEnter", function(self) if (MBCtrlDB.tooltips==true) then GameTooltip:SetOwner(self, "ANCHOR_CURSOR"); GameTooltip:ClearLines(); if InCombatLockdown() then GameTooltip:AddLine("In Combat, Hold Shift + Click to (Un)Lock",0.88,0.65,0) else GameTooltip:AddLine("Lock/Unlock",0.88,0.65,0) end; GameTooltip:Show() end end)
 ctrlLockIcon:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 ctrlLockIcon:SetPoint("LEFT", optIcon , "RIGHT")
 ctrlLockIcon:SetAlpha(1)
@@ -460,7 +460,7 @@ flarelockIcon:SetNormalTexture("Interface\\AddOns\\MarkingBarLives\\resources\\G
 flarelockIcon:GetNormalTexture():SetTexCoord(0.25, 0.50, 0, 1)
 flarelockIcon:EnableMouse(true)
 flarelockIcon:SetScript("OnClick", function(self) MB_lockToggle("flare") end)
-flarelockIcon:SetScript("OnEnter", function(self) if (MBFlaresDB.tooltips) then GameTooltip:SetOwner(self, "ANCHOR_CURSOR"); GameTooltip:ClearLines(); GameTooltip:AddLine("Lock/Unlock",0.88,0.65,0); GameTooltip:Show() end end)
+flarelockIcon:SetScript("OnEnter", function(self) if (MBFlaresDB.tooltips) then GameTooltip:SetOwner(self, "ANCHOR_CURSOR"); GameTooltip:ClearLines(); if InCombatLockdown() then GameTooltip:AddLine("In Combat, Hold Shift + Click to (Un)Lock",0.88,0.65,0) else GameTooltip:AddLine("Lock/Unlock",0.88,0.65,0) end; GameTooltip:Show() end end)
 flarelockIcon:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
 -------------------------------------------------------
