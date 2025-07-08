@@ -129,7 +129,7 @@ MB_mainFrame:SetClampedToScreen(false)
 
 local moverLeft = CreateFrame("Frame", "moverLeft", MB_mainFrame, BackdropTemplateMixin and "BackdropTemplate")
 moverLeft:SetBackdrop(defaultBackdrop)
-moverLeft:SetBackdropColor(0.1,1,0.1,0.7) -- Make the move box green for better visibility
+moverLeft:SetBackdropColor(1,1,0.1,0.7) -- Make the move box yellow for better visibility
 moverLeft:EnableMouse(true)
 moverLeft:SetMovable(true)
 moverLeft:SetSize(20,35)
@@ -308,7 +308,7 @@ ctrlLockIcon:EnableMouse(true)
 
 local moverRight = CreateFrame("Frame", "moverRight", MB_controlFrame, BackdropTemplateMixin and "BackdropTemplate")
 moverRight:SetBackdrop(defaultBackdrop)
-moverRight:SetBackdropColor(0.1,1,0.1,0.7) -- Make the move box green for better visibility
+moverRight:SetBackdropColor(1,1,0.1,0.7) -- Make the move box yellow for better visibility
 moverRight:SetSize(20,35)
 moverRight:SetMovable(true)
 moverRight:SetScript("OnMouseDown", function(self,button) if (button=="LeftButton") then MB_controlFrame:StartMoving() end end)
@@ -335,7 +335,7 @@ MBFlares_mainFrame:SetClampedToScreen(false)
 
 local MBFlares_moverLeft = CreateFrame("Frame", "MBFlares_moverLeft", MBFlares_mainFrame, BackdropTemplateMixin and "BackdropTemplate")
 MBFlares_moverLeft:SetBackdrop(defaultBackdrop)
-MBFlares_moverLeft:SetBackdropColor(0.1,1,0.1,0.7) -- Make the move box green for better visibility
+MBFlares_moverLeft:SetBackdropColor(1,1,0.1,0.7) -- Make the move box yellow for better visibility
 MBFlares_moverLeft:EnableMouse(true)
 MBFlares_moverLeft:SetMovable(true)
 MBFlares_moverLeft:SetSize(20,35)
