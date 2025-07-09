@@ -744,6 +744,7 @@ function MB_lockToggle(DB)
 			MB_lock("flare")
 			end
 		end
+	end
 end
 
 function MB_ctrlLock()
@@ -1675,7 +1676,7 @@ flareRaidText:SetText(" in a Raid ")
 local flareLockCheck = CreateFrame("CheckButton", "flareLockCheck", FlaresOptPg, "UICheckButtonTemplate")
 flareLockCheck:SetPoint("TOP",flareAloneCheck, "BOTTOM",0,-5)
 flareLockCheck:SetSize(20,20)
-flareLockCheck:SetScript("OnClick", function(self) MB_lockToggle("flare") end)
+flareLockCheck:SetScript("OnClick", function(self) MB_lockToggle("flare") MB_checkUpdater() end)
 local flareLockText = FlaresOptPg:CreateFontString("flareLockText", "OVERLAY", "ChatFontSmall")
 flareLockText:SetPoint("LEFT", flareLockCheck, "RIGHT", 5,0)
 flareLockText:SetText("Lock "..MBF.."'s position")
