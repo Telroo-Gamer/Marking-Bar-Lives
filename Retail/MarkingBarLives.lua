@@ -129,7 +129,7 @@ MB_mainFrame:SetClampedToScreen(false)
 
 local moverLeft = CreateFrame("Frame", "moverLeft", MB_mainFrame, BackdropTemplateMixin and "BackdropTemplate")
 moverLeft:SetBackdrop(defaultBackdrop)
-moverLeft:SetBackdropColor(0.1,0.1,0.1,0.7)
+moverLeft:SetBackdropColor(1,1,0.1,0.7) -- Make the move box yellow for better visibility
 moverLeft:EnableMouse(true)
 moverLeft:SetMovable(true)
 moverLeft:SetSize(20,35)
@@ -236,7 +236,7 @@ lockIcon:SetNormalTexture("Interface\\AddOns\\MarkingBarLives\\resources\\Glues-
 lockIcon:GetNormalTexture():SetTexCoord(0.25, 0.50, 0, 1)
 lockIcon:EnableMouse(true)
 lockIcon:SetScript("OnClick", function(self) MB_lockToggle("main") end)
-lockIcon:SetScript("OnEnter", function(self) if (MBDB.tooltips==true) then GameTooltip:SetOwner(self, "ANCHOR_CURSOR"); GameTooltip:ClearLines(); GameTooltip:AddLine("Lock/Unlock Icons",0.88,0.65,0); GameTooltip:Show() end end)
+lockIcon:SetScript("OnEnter", function(self) if (MBDB.tooltips==true) then GameTooltip:SetOwner(self, "ANCHOR_CURSOR"); GameTooltip:ClearLines(); if InCombatLockdown() then GameTooltip:AddLine("In Combat, Hold Shift + Click to (Un)Lock",0.88,0.65,0) else GameTooltip:AddLine("Lock/Unlock",0.88,0.65,0) end; GameTooltip:Show() end end)
 lockIcon:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
 -------------------------------------------------------
@@ -300,7 +300,7 @@ ctrlLockIcon:SetSize(20,20)
 ctrlLockIcon:SetNormalTexture("Interface\\AddOns\\MarkingBarLives\\resources\\Glues-Addon-Icons")
 ctrlLockIcon:GetNormalTexture():SetTexCoord(0.25, 0.50, 0, 1)
 ctrlLockIcon:SetScript("OnClick", function(self) MB_lockToggle("ctrl") end)
-ctrlLockIcon:SetScript("OnEnter", function(self) if (MBCtrlDB.tooltips==true) then GameTooltip:SetOwner(self, "ANCHOR_CURSOR"); GameTooltip:ClearLines(); GameTooltip:AddLine("Lock/Unlock Controls",0.88,0.65,0); GameTooltip:Show() end end)
+ctrlLockIcon:SetScript("OnEnter", function(self) if (MBCtrlDB.tooltips==true) then GameTooltip:SetOwner(self, "ANCHOR_CURSOR"); GameTooltip:ClearLines(); if InCombatLockdown() then GameTooltip:AddLine("In Combat, Hold Shift + Click to (Un)Lock",0.88,0.65,0) else GameTooltip:AddLine("Lock/Unlock",0.88,0.65,0) end; GameTooltip:Show() end end)
 ctrlLockIcon:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 ctrlLockIcon:SetPoint("LEFT", optIcon , "RIGHT")
 ctrlLockIcon:SetAlpha(1)
@@ -308,7 +308,7 @@ ctrlLockIcon:EnableMouse(true)
 
 local moverRight = CreateFrame("Frame", "moverRight", MB_controlFrame, BackdropTemplateMixin and "BackdropTemplate")
 moverRight:SetBackdrop(defaultBackdrop)
-moverRight:SetBackdropColor(0.1,0.1,0.1,0.7)
+moverRight:SetBackdropColor(1,1,0.1,0.7) -- Make the move box yellow for better visibility
 moverRight:SetSize(20,35)
 moverRight:SetMovable(true)
 moverRight:SetScript("OnMouseDown", function(self,button) if (button=="LeftButton") then MB_controlFrame:StartMoving() end end)
@@ -335,7 +335,7 @@ MBFlares_mainFrame:SetClampedToScreen(false)
 
 local MBFlares_moverLeft = CreateFrame("Frame", "MBFlares_moverLeft", MBFlares_mainFrame, BackdropTemplateMixin and "BackdropTemplate")
 MBFlares_moverLeft:SetBackdrop(defaultBackdrop)
-MBFlares_moverLeft:SetBackdropColor(0.1,0.1,0.1,0.7)
+MBFlares_moverLeft:SetBackdropColor(1,1,0.1,0.7) -- Make the move box yellow for better visibility
 MBFlares_moverLeft:EnableMouse(true)
 MBFlares_moverLeft:SetMovable(true)
 MBFlares_moverLeft:SetSize(20,35)
@@ -460,7 +460,7 @@ flarelockIcon:SetNormalTexture("Interface\\AddOns\\MarkingBarLives\\resources\\G
 flarelockIcon:GetNormalTexture():SetTexCoord(0.25, 0.50, 0, 1)
 flarelockIcon:EnableMouse(true)
 flarelockIcon:SetScript("OnClick", function(self) MB_lockToggle("flare") end)
-flarelockIcon:SetScript("OnEnter", function(self) if (MBFlaresDB.tooltips) then GameTooltip:SetOwner(self, "ANCHOR_CURSOR"); GameTooltip:ClearLines(); GameTooltip:AddLine("Lock/Unlock",0.88,0.65,0); GameTooltip:Show() end end)
+flarelockIcon:SetScript("OnEnter", function(self) if (MBFlaresDB.tooltips) then GameTooltip:SetOwner(self, "ANCHOR_CURSOR"); GameTooltip:ClearLines(); if InCombatLockdown() then GameTooltip:AddLine("In Combat, Hold Shift + Click to (Un)Lock",0.88,0.65,0) else GameTooltip:AddLine("Lock/Unlock",0.88,0.65,0) end; GameTooltip:Show() end end)
 flarelockIcon:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
 -------------------------------------------------------
@@ -478,8 +478,8 @@ function MB_Announce()
 		else -- IN A PARTY
 			MB_Announce_to_Chat("PARTY") 
 		end	
-			else if IsInGroup(LE_PARTY_CATEGORY_INSTANCE) then
-				if IsInRaid() then
+			else if IsInGroup(LE_PARTY_CATEGORY_INSTANCE) then -- true if the player is in a instance type group. (e.g. LFG, LFR) 
+				if IsInRaid() then  -- IN A RAID
 					if UnitIsGroupLeader("player") or UnitIsGroupAssistant("player") then		-- ABLE TO MARK
 						MB_Announce_to_Chat("INSTANCE_CHAT")	
 					else
@@ -674,18 +674,77 @@ function MB_unlock(DB)
 end
 
 function MB_lockToggle(DB)
-    if ( DB == "main" ) then
-        if MBDB.locked then MB_unlock("main") else MB_lock("main") end
-    elseif ( DB == "ctrl" ) then
-        if MBCtrlDB.locked then
-            if MBDB.ctrlLock then MB_ctrlUnlock() end -- if ctrl is connected to icons
-            MB_unlock("ctrl")
-        else
-            MB_lock("ctrl")
-        end
-    elseif ( DB == "flare" ) then
-        if MBFlaresDB.locked then MB_unlock("flare") else MB_lock("flare") end
-    end
+	if InCombatLockdown() then -- In Combat prevents Lock interaction		
+		--if IsControlKeyDown() and not (IsAltKeyDown() or IsShiftKeyDown()) then -- Ctrl and not Alt or Shift is used to unlock
+		if IsShiftKeyDown() then -- Shift is used to unlock
+			if ( DB == "main" ) then
+				if MBDB.locked then
+					MB_unlock("main")
+				else
+					MB_lock("main")
+				end
+			elseif ( DB == "ctrl" ) then
+				if MBCtrlDB.locked then
+					if MBDB.ctrlLock then -- if ctrl is connected to icons
+						MB_ctrlUnlock()
+					end
+					MB_unlock("ctrl")
+				else
+					MB_lock("ctrl")
+				end
+			elseif ( DB == "flare" ) then
+				if MBFlaresDB.locked then
+					MB_unlock("flare")
+				else
+					MB_lock("flare")
+				end
+			end
+		end
+	else -- Out of Combat allows Lock interaction	
+		if ( DB == "main" ) then
+			if MBDB.locked then
+				MB_unlock("main")
+			else
+				MB_lock("main")
+			end
+		elseif ( DB == "main_menu" ) then
+			if MBDB.locked then
+				MB_unlock("main")
+			else
+				MB_lock("main")
+			end
+		elseif ( DB == "ctrl" ) then
+			if MBCtrlDB.locked then -- if ctrl is connected to icons
+				if MBDB.ctrlLock then
+					MB_ctrlUnlock()
+				end
+				MB_unlock("ctrl")
+			else
+				MB_lock("ctrl")
+			end
+		elseif ( DB == "ctrl_menu" ) then
+			if MBCtrlDB.locked then
+				if MBDB.ctrlLock then -- if ctrl is connected to icons
+					MB_ctrlUnlock()
+				end
+				MB_unlock("ctrl")
+			else
+				MB_lock("ctrl")
+			end
+		elseif ( DB == "flare" ) then
+			if MBFlaresDB.locked then
+				MB_unlock("flare")
+			else
+				MB_lock("flare")
+			end
+		elseif ( DB == "flare_menu" ) then
+			if MBFlaresDB.locked then
+				MB_unlock("flare")
+			else
+			MB_lock("flare")
+			end
+		end
+	end
 end
 
 function MB_ctrlLock()
@@ -1617,7 +1676,7 @@ flareRaidText:SetText(" in a Raid ")
 local flareLockCheck = CreateFrame("CheckButton", "flareLockCheck", FlaresOptPg, "UICheckButtonTemplate")
 flareLockCheck:SetPoint("TOP",flareAloneCheck, "BOTTOM",0,-5)
 flareLockCheck:SetSize(20,20)
-flareLockCheck:SetScript("OnClick", function(self) MB_lockToggle("flare") end)
+flareLockCheck:SetScript("OnClick", function(self) MB_lockToggle("flare") MB_checkUpdater() end)
 local flareLockText = FlaresOptPg:CreateFontString("flareLockText", "OVERLAY", "ChatFontSmall")
 flareLockText:SetPoint("LEFT", flareLockCheck, "RIGHT", 5,0)
 flareLockText:SetText("Lock "..MBF.."'s position")
