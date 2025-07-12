@@ -1,3 +1,9 @@
+Version 11.1.7
+Updated TOC
+Made the lock buttons not clickable while in combat unless shift is held
+  *Mouse over text updated to say how to use while in combat (Hold Shift)
+Made the move box yellow for better visibility
+
 Version 11.0.2
 Updated TOC
 Update lua errors for TWW patch.
